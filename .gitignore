@@ -1,0 +1,30 @@
+# Unity関連の不要なフォルダ
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# OSやIDE関連の不要ファイル
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Unityの自動生成ファイル
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.pidb
+*.user
+*.booproj
+*.svd
+
+# その他
+*.log
+*.bak
+
