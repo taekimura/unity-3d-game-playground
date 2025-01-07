@@ -19,53 +19,23 @@ public class @PlayerActions : IInputActionCollection, IDisposable
             ""id"": ""6542e516-d7b8-4f59-b5d9-e3a656c046be"",
             ""actions"": [
                 {
-                    ""name"": ""Idle"",
-                    ""type"": ""Button"",
-                    ""id"": ""1af01e71-8a06-45a6-9b92-f8f790e2e693"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Battle"",
-                    ""type"": ""Button"",
-                    ""id"": ""abc95383-16f2-4b67-ac68-15748a344a5e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
                     ""name"": ""Move"",
                     ""type"": ""PassThrough"",
                     ""id"": ""934883b2-1ee1-4f7e-b70c-58695ce504da"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseMovement"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""e5c5ec50-a572-4673-be16-c8271fb46938"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""9dbbb189-50ec-4c14-8ad7-1f46485a68a9"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Idle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6b044c5f-0631-4269-8e26-dfc029c544ff"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Battle"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""cd907bc6-1f39-4fd2-8b17-d1ce2cf50f57"",
@@ -120,6 +90,17 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8033a498-ceb6-4f21-acfe-428ee10abf52"",
+                    ""path"": ""<Mouse>/delta/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -128,9 +109,8 @@ public class @PlayerActions : IInputActionCollection, IDisposable
 }");
         // Controls
         m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
-        m_Controls_Idle = m_Controls.FindAction("Idle", throwIfNotFound: true);
-        m_Controls_Battle = m_Controls.FindAction("Battle", throwIfNotFound: true);
         m_Controls_Move = m_Controls.FindAction("Move", throwIfNotFound: true);
+        m_Controls_MouseMovement = m_Controls.FindAction("MouseMovement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -180,16 +160,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     // Controls
     private readonly InputActionMap m_Controls;
     private IControlsActions m_ControlsActionsCallbackInterface;
-    private readonly InputAction m_Controls_Idle;
-    private readonly InputAction m_Controls_Battle;
     private readonly InputAction m_Controls_Move;
+    private readonly InputAction m_Controls_MouseMovement;
     public struct ControlsActions
     {
         private @PlayerActions m_Wrapper;
         public ControlsActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Idle => m_Wrapper.m_Controls_Idle;
-        public InputAction @Battle => m_Wrapper.m_Controls_Battle;
         public InputAction @Move => m_Wrapper.m_Controls_Move;
+        public InputAction @MouseMovement => m_Wrapper.m_Controls_MouseMovement;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -199,36 +177,29 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_ControlsActionsCallbackInterface != null)
             {
-                @Idle.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnIdle;
-                @Idle.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnIdle;
-                @Idle.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnIdle;
-                @Battle.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnBattle;
-                @Battle.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnBattle;
-                @Battle.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnBattle;
                 @Move.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnMove;
+                @MouseMovement.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnMouseMovement;
+                @MouseMovement.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnMouseMovement;
+                @MouseMovement.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnMouseMovement;
             }
             m_Wrapper.m_ControlsActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Idle.started += instance.OnIdle;
-                @Idle.performed += instance.OnIdle;
-                @Idle.canceled += instance.OnIdle;
-                @Battle.started += instance.OnBattle;
-                @Battle.performed += instance.OnBattle;
-                @Battle.canceled += instance.OnBattle;
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @MouseMovement.started += instance.OnMouseMovement;
+                @MouseMovement.performed += instance.OnMouseMovement;
+                @MouseMovement.canceled += instance.OnMouseMovement;
             }
         }
     }
     public ControlsActions @Controls => new ControlsActions(this);
     public interface IControlsActions
     {
-        void OnIdle(InputAction.CallbackContext context);
-        void OnBattle(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnMouseMovement(InputAction.CallbackContext context);
     }
 }

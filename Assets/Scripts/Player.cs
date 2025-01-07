@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -18,12 +19,17 @@ public class Player : MonoBehaviour
     #region INPUT
     private Vector2 movementInput;
 
+    private float horizontalMouseInput;
+
     #endregion
 
     #region VALUES
 
     [SerializeField]
     private float movementSpeed;
+
+    [SerializeField]
+    private float rotationSpeed;
 
     #endregion
 
@@ -32,9 +38,8 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         actions = new PlayerActions();
-        actions.Controls.Move.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
-        actions.Controls.Idle.performed += ctx => Idle();
-        actions.Controls.Battle.performed += ctx => Battle();
+        actions.Controls.Move.performed += cxt => movementInput = cxt.ReadValue<Vector2>();
+        actions.Controls.MouseMovement.performed += cxt => horizontalMouseInput = cxt.ReadValue<float>();
     }
 
     // Start is called before the first frame update
@@ -46,6 +51,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Movement();
+        Rotate();
     }
 
     private void Movement()
@@ -56,16 +62,12 @@ public class Player : MonoBehaviour
         characterController.Move(movement * movementSpeed * Time.deltaTime);
     }
 
-    private void Idle()
+    private void Rotate()
     {
-        animator.SetBool("Idle", true);
-        animator.SetBool("Battle", false);
-    }
-
-    private void Battle()
-    {
-        animator.SetBool("Idle", false);
-        animator.SetBool("Battle", true);
+        if(!Mouse.current.rightButton.isPressed){
+            float mouseX = horizontalMouseInput * rotationSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up * mouseX);
+        }
     }
 
     private void OnEnable()
@@ -77,6 +79,4 @@ public class Player : MonoBehaviour
     {
         actions.Disable();
     }
-
-
 }

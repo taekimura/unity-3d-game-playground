@@ -293,7 +293,7 @@ Transform:
   m_Father: {fileID: 1221834993}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &236201558
+--- !u!1 &403180125
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -301,28 +301,28 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 236201559}
+  - component: {fileID: 403180126}
   m_Layer: 0
-  m_Name: CameraFollowTarget
+  m_Name: DefaultTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &236201559
+--- !u!4 &403180126
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 236201558}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.235, z: -4.649}
+  m_GameObject: {fileID: 403180125}
+  m_LocalRotation: {x: -0.05424658, y: -0, z: -0, w: 0.9985276}
+  m_LocalPosition: {x: -0.13000011, y: 1.217, z: -3.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 475585990}
   m_RootOrder: 26
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -6.2190003, y: 0, z: 0}
 --- !u!1 &475585987 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 82a2914d8f86c62488456950c8330e38,
@@ -344,6 +344,7 @@ MonoBehaviour:
   characterController: {fileID: 475585991}
   animator: {fileID: 475585989}
   movementSpeed: 2.5
+  rotationSpeed: 50
 --- !u!95 &475585989 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: 82a2914d8f86c62488456950c8330e38,
@@ -872,8 +873,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0e1a30c4eee4f47a39868fe3160e17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAtTarget: {fileID: 475585990}
-  followTarget: {fileID: 236201559}
+  rotationSpeed: 50
+  returnSpeed: 200
+  target: {fileID: 475585990}
+  defaultTransform: {fileID: 403180126}
+  smoothFactor: 0.5
 --- !u!1001 &1053687073
 PrefabInstance:
   m_ObjectHideFlags: 0
