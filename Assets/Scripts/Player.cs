@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private PlayerActions actions;
 
     [SerializeField]
-    private Animator animator;
+    private AnyStateAnimator animator;
 
     #endregion
 
@@ -60,6 +60,17 @@ public class Player : MonoBehaviour
         Vector3 movement = transform.right * movementInput.x + transform.forward * movementInput.y;
 
         characterController.Move(movement * movementSpeed * Time.deltaTime);
+
+        if(movementInput.y != 0 || movementInput.x != 0)
+        {
+            animator.TryPlayAnimation("Walk");
+            animator.onAnimationDone("Idle");
+        }
+        else
+        {
+            animator.onAnimationDone("Walk");
+            animator.TryPlayAnimation("Idle");
+        }
     }
 
     private void Rotate()
