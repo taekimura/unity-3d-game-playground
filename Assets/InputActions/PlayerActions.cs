@@ -49,6 +49,22 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Wave"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c05043b-28a3-44d9-9191-a52bb8a0e82c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3396e37-3585-4b69-a03e-87e71a05242c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -139,6 +155,28 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b4d8cb9-e561-4e4f-8471-b3d53f5ff84c"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Wave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6451608e-4f7a-4c9f-940b-f7e1ada39c0e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -151,6 +189,8 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         m_Controls_MouseMovement = m_Controls.FindAction("MouseMovement", throwIfNotFound: true);
         m_Controls_Run = m_Controls.FindAction("Run", throwIfNotFound: true);
         m_Controls_Jump = m_Controls.FindAction("Jump", throwIfNotFound: true);
+        m_Controls_Wave = m_Controls.FindAction("Wave", throwIfNotFound: true);
+        m_Controls_Aim = m_Controls.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,6 +244,8 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Controls_MouseMovement;
     private readonly InputAction m_Controls_Run;
     private readonly InputAction m_Controls_Jump;
+    private readonly InputAction m_Controls_Wave;
+    private readonly InputAction m_Controls_Aim;
     public struct ControlsActions
     {
         private @PlayerActions m_Wrapper;
@@ -212,6 +254,8 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         public InputAction @MouseMovement => m_Wrapper.m_Controls_MouseMovement;
         public InputAction @Run => m_Wrapper.m_Controls_Run;
         public InputAction @Jump => m_Wrapper.m_Controls_Jump;
+        public InputAction @Wave => m_Wrapper.m_Controls_Wave;
+        public InputAction @Aim => m_Wrapper.m_Controls_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -233,6 +277,12 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Jump.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnJump;
+                @Wave.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnWave;
+                @Wave.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnWave;
+                @Wave.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnWave;
+                @Aim.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_ControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -249,6 +299,12 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Wave.started += instance.OnWave;
+                @Wave.performed += instance.OnWave;
+                @Wave.canceled += instance.OnWave;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -259,5 +315,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         void OnMouseMovement(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnWave(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

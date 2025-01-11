@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-
 public class AnyStateAnimator : MonoBehaviour
 {
     private Animator animator;
@@ -25,7 +24,7 @@ public class AnyStateAnimator : MonoBehaviour
         Animate();
     }
 
-    public void AddAnimation(params AnyStateAnimation[] animations)
+    public void AddAnimations(params AnyStateAnimation[] animations)
     {
         for (int i = 0; i < animations.Length; i++)
         {
@@ -35,17 +34,18 @@ public class AnyStateAnimator : MonoBehaviour
 
     public void TryPlayAnimation(string animationName)
     {
-
         bool startAnimation = true;
 
-        if (anyStateAnimations[animationName].HigherPriority == null){
+        if (anyStateAnimations[animationName].HigherPrio == null)
+        {
             StartAnimation();
         }
         else
         {
-            foreach(string animName in anyStateAnimations[animationName].HigherPriority)
+            foreach (string animName in anyStateAnimations[animationName].HigherPrio)
             {
-                if(anyStateAnimations[animName].IsPlaying == true){
+                if (anyStateAnimations[animName].IsPlaying == true)
+                {
                     startAnimation = false;
                     break;
                 }
@@ -56,17 +56,28 @@ public class AnyStateAnimator : MonoBehaviour
             }
         }
 
-        void StartAnimation ()
+
+        void StartAnimation()
         {
-            foreach(string animName in anyStateAnimations.Keys.ToList())
-        {
-            anyStateAnimations[animName].IsPlaying = false;
+            foreach (string anim in anyStateAnimations.Keys.ToList())
+            {
+                if (!anyStateAnimations[anim].Async || anyStateAnimations[anim].Async && anyStateAnimations[anim].HigherPrio.Contains(animationName))
+                {
+                    anyStateAnimations[anim].IsPlaying = false;
+                }
+            }
+
+            anyStateAnimations[animationName].IsPlaying = true;
         }
-        anyStateAnimations[animationName].IsPlaying = true;
-        }
+
     }
 
-    public void onAnimationDone(string animationName)
+    public bool IsAnimationActive(string animName)
+    {
+        return anyStateAnimations[animName].IsPlaying;
+    }
+
+    public void OnAnimationDone(string animationName)
     {
         anyStateAnimations[animationName].IsPlaying = false;
     }
