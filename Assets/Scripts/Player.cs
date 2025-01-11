@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private PlayerActions actions;
 
     [SerializeField]
-    private AnyStateAnimator animator;
+    private AnyStateAnimator anyStateAnimator;
 
     #endregion
 
@@ -21,6 +21,12 @@ public class Player : MonoBehaviour
 
     private float horizontalMouseInput;
 
+    #endregion
+
+    #region ANIMATION
+    [SerializeField]
+    private float animationSmoothTime;
+    private Vector2 animationVector;
     #endregion
 
     #region VALUES
@@ -45,6 +51,10 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        AnyStateAnimation idle = new AnyStateAnimation("Idle");
+        AnyStateAnimation walk = new AnyStateAnimation("Walk");
+
+        anyStateAnimator.AddAnimation(idle, walk);
     }
 
     // Update is called once per frame
@@ -59,18 +69,21 @@ public class Player : MonoBehaviour
         // move a character based on input 
         Vector3 movement = transform.right * movementInput.x + transform.forward * movementInput.y;
 
+        animationVector = Vector2.MoveTowards(animationVector, movementInput, animationSmoothTime* Time.deltaTime);
+
         characterController.Move(movement * movementSpeed * Time.deltaTime);
 
-        if(movementInput.y != 0 || movementInput.x != 0)
+        if (movementInput.y != 0 || movementInput.x != 0)
         {
-            animator.TryPlayAnimation("Walk");
-            animator.onAnimationDone("Idle");
+            anyStateAnimator.TryPlayAnimation("Walk");
         }
-        else
+        if (characterController.velocity  == Vector3.zero && animationVector == Vector2.zero)
         {
-            animator.onAnimationDone("Walk");
-            animator.TryPlayAnimation("Idle");
+            anyStateAnimator.TryPlayAnimation("Idle");
         }
+
+        anyStateAnimator.Animator.SetFloat("Vertical", animationVector.y);
+        anyStateAnimator.Animator.SetFloat("Horizontal", animationVector.x);
     }
 
     private void Rotate()

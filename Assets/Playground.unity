@@ -342,7 +342,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterController: {fileID: 475585991}
-  animator: {fileID: 475585992}
+  anyStateAnimator: {fileID: 475585992}
+  animationSmoothTime: 6
   movementSpeed: 2.5
   rotationSpeed: 50
 --- !u!4 &475585990 stripped
