@@ -8,8 +8,11 @@ public class AnyStateAnimation
 
     public bool IsPlaying { get; set; }
 
-    public AnyStateAnimation(string animationName)
+    public string[] HigherPriority { get; set; }
+
+    public AnyStateAnimation(string animationName, params string[] higherPriority)
     {
         this.AnimationName = animationName;
+        this.HigherPriority = higherPriority;
     }
 }

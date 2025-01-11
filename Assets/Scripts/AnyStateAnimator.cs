@@ -36,17 +36,39 @@ public class AnyStateAnimator : MonoBehaviour
     public void TryPlayAnimation(string animationName)
     {
 
-        foreach(string animName in anyStateAnimations.Keys.ToList())
+        bool startAnimation = true;
+
+        if (anyStateAnimations[animationName].HigherPriority == null){
+            StartAnimation();
+        }
+        else
+        {
+            foreach(string animName in anyStateAnimations[animationName].HigherPriority)
+            {
+                if(anyStateAnimations[animName].IsPlaying == true){
+                    startAnimation = false;
+                    break;
+                }
+            }
+            if (startAnimation)
+            {
+                StartAnimation();
+            }
+        }
+
+        void StartAnimation ()
+        {
+            foreach(string animName in anyStateAnimations.Keys.ToList())
         {
             anyStateAnimations[animName].IsPlaying = false;
         }
-
         anyStateAnimations[animationName].IsPlaying = true;
+        }
     }
 
     public void onAnimationDone(string animationName)
     {
-        Animator.SetBool(animationName, false);
+        anyStateAnimations[animationName].IsPlaying = false;
     }
 
     private void Animate()

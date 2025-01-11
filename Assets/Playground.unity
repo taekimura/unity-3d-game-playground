@@ -344,7 +344,8 @@ MonoBehaviour:
   characterController: {fileID: 475585991}
   anyStateAnimator: {fileID: 475585992}
   animationSmoothTime: 6
-  movementSpeed: 2.5
+  walkSpeed: 2.5
+  runSpeed: 5
   rotationSpeed: 50
 --- !u!4 &475585990 stripped
 Transform:
