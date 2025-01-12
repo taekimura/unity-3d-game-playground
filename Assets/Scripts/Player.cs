@@ -47,6 +47,19 @@ public class Player : MonoBehaviour
     private float currentSpeed;
 
     [SerializeField]
+    private Vector3 playerVelocity;
+
+    private float gravityValue = -9.81f; // default value is being used in Unity
+
+    [SerializeField]
+    private float jumpHeight;
+
+    [SerializeField]
+    private bool isGrounded = false;
+
+    private float lastY;
+
+    [SerializeField]
     private float rotationSpeed;
 
     private bool isRunning;
@@ -74,24 +87,27 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        AnyStateAnimation idle = new AnyStateAnimation("Idle",false,"Jump");
-        AnyStateAnimation walk = new AnyStateAnimation("Walk", false, "Jump");
-        AnyStateAnimation run = new AnyStateAnimation("Run", false, "Jump");
+        AnyStateAnimation idle = new AnyStateAnimation("Idle",false,"Jump", "Fall");
+        AnyStateAnimation walk = new AnyStateAnimation("Walk", false, "Jump", "Fall");
+        AnyStateAnimation run = new AnyStateAnimation("Run", false, "Jump", "Fall");
         AnyStateAnimation jump = new AnyStateAnimation("Jump", false);
+        AnyStateAnimation fall = new AnyStateAnimation("Fall", false);
         AnyStateAnimation wave = new AnyStateAnimation("Wave",true);
         AnyStateAnimation aim = new AnyStateAnimation("Aim", true);
         AnyStateAnimation shoot = new AnyStateAnimation("Shoot", true);
 
 
-        anyStateAnimator.AddAnimations(idle, walk,run, jump, wave,aim,shoot);
+        anyStateAnimator.AddAnimations(idle, walk, run, jump, wave, aim, shoot, fall);
     }
 
     // Update is called once per frame
     private void Update()
     {
+        Gravity();
         Movement();
         Rotate();
         Shoot();
+        AirControl();
     }
 
     private void Movement()
@@ -144,9 +160,45 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void Gravity()
+    {
+        playerVelocity.y += gravityValue * Time.deltaTime;
+        characterController.Move(playerVelocity * Time.deltaTime);
+
+        if(characterController.isGrounded && playerVelocity.y < 0)
+        {
+            playerVelocity.y = 0;
+            isGrounded = true;
+        }
+    }
+
+    private void AirControl()
+    {
+        float distancePerSecondSinceLastFrame = (transform.position.y - lastY) * Time.deltaTime;
+        lastY = transform.position.y;
+
+        if(distancePerSecondSinceLastFrame < 0 && !isGrounded)
+        {
+            anyStateAnimator.TryPlayAnimation("Fall");
+        }
+        else
+        {
+            anyStateAnimator.OnAnimationDone("Fall");
+        }
+        if (anyStateAnimator.IsAnimationActive("Jump") && isGrounded)
+        {
+            anyStateAnimator.OnAnimationDone("Jump");
+        }
+    }
+
     private void Jump()
     {
-        anyStateAnimator.TryPlayAnimation("Jump");
+        if(isGrounded)
+        {
+            isGrounded = false;
+            anyStateAnimator.TryPlayAnimation("Jump");
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+        }
     }
 
     private void Wave()

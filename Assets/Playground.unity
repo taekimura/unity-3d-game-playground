@@ -346,7 +346,11 @@ MonoBehaviour:
   animationSmoothTime: 6
   walkSpeed: 2.5
   runSpeed: 5
+  playerVelocity: {x: 0, y: 0, z: 0}
+  jumpHeight: 0.5
+  isGrounded: 0
   rotationSpeed: 50
+  shootDelay: 0
 --- !u!4 &475585990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 82a2914d8f86c62488456950c8330e38,
