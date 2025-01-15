@@ -38,4 +38,14 @@ public class Car : MonoBehaviour
             transform.position = startPos;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            
+            collision.gameObject.GetComponent<Player>().Die();
+            speed = 0;
+        }
+    }
 }

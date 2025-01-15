@@ -59,6 +59,8 @@ public class Player : MonoBehaviour
 
     private float lastY;
 
+    private bool dead = false;
+
     [SerializeField]
     private float rotationSpeed;
 
@@ -87,27 +89,32 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        AnyStateAnimation idle = new AnyStateAnimation("Idle",false,"Jump", "Fall");
-        AnyStateAnimation walk = new AnyStateAnimation("Walk", false, "Jump", "Fall");
-        AnyStateAnimation run = new AnyStateAnimation("Run", false, "Jump", "Fall");
-        AnyStateAnimation jump = new AnyStateAnimation("Jump", false);
-        AnyStateAnimation fall = new AnyStateAnimation("Fall", false);
-        AnyStateAnimation wave = new AnyStateAnimation("Wave",true);
-        AnyStateAnimation aim = new AnyStateAnimation("Aim", true);
-        AnyStateAnimation shoot = new AnyStateAnimation("Shoot", true);
+        AnyStateAnimation idle = new AnyStateAnimation("Idle",false,"Jump", "Fall", "Die");
+        AnyStateAnimation walk = new AnyStateAnimation("Walk", false, "Jump", "Fall", "Die");
+        AnyStateAnimation run = new AnyStateAnimation("Run", false, "Jump", "Fall", "Die");
+        AnyStateAnimation jump = new AnyStateAnimation("Jump", false, "Fall", "Die");
+        AnyStateAnimation fall = new AnyStateAnimation("Fall", false, "Die");
+        AnyStateAnimation wave = new AnyStateAnimation("Wave",true, "Die");
+        AnyStateAnimation aim = new AnyStateAnimation("Aim", true, "Die");
+        AnyStateAnimation shoot = new AnyStateAnimation("Shoot", true, "Die");
+        AnyStateAnimation die = new AnyStateAnimation("Die", false);
 
 
-        anyStateAnimator.AddAnimations(idle, walk, run, jump, wave, aim, shoot, fall);
+        anyStateAnimator.AddAnimations(idle, walk, run, jump, wave, aim, shoot, fall, die);
     }
 
     // Update is called once per frame
     private void Update()
     {
         Gravity();
-        Movement();
-        Rotate();
-        Shoot();
-        AirControl();
+        
+        if(!dead)
+        {
+            Movement();
+            Rotate();
+            Shoot();
+            AirControl();
+        }
     }
 
     private void Movement()
@@ -245,5 +252,15 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         actions.Disable();
+    }
+
+    public void Die()
+    {
+        if(!dead)
+        {
+        playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+        anyStateAnimator.TryPlayAnimation("Die");
+        dead = true;
+        }
     }
 }
