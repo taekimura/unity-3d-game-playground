@@ -57,6 +57,8 @@ public class Collectable : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            UIManager.MyInstance.Score++;
+            Debug.Log(UIManager.MyInstance.Score);
             Destroy(gameObject);
         }
     }
