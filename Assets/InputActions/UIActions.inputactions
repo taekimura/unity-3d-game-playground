@@ -1,0 +1,33 @@
+{
+    "name": "UIActions",
+    "maps": [
+        {
+            "name": "Actions",
+            "id": "12c60c1d-7041-4744-8deb-99c1383ea6e7",
+            "actions": [
+                {
+                    "name": "OpenMenu",
+                    "type": "Button",
+                    "id": "c4f8a514-3719-4361-b289-db40536ad0d8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3b128d55-7bcb-4afb-8e08-67ecec16334a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
