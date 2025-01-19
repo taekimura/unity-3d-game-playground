@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,9 +11,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject menu;
 
+    [SerializeField]
+    private TMP_Text scoreText;
+
     public bool MenuOpen { get; set; }
 
-    private static UIManager instance; 
+    private static UIManager instance;
 
     public static UIManager MyInstance
     {
@@ -27,12 +31,24 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public int Score { get; set; }
+    
+
+    private int score;
+
+    public int Score
+    {
+        get { return score; }
+        set
+        {
+            score = value;
+            scoreText.text = score.ToString();
+        }
+    }
 
     private void Awake()
     {
         uiActions = new UIActions();
-        uiActions.Actions.OpenMenu.performed += ctx => OpenCloseMenu();
+        uiActions.Actions.OpenMenu.performed += cxt => OpenCloseMenu();
     }
 
     private void OpenCloseMenu()

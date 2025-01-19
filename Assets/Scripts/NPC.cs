@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
+
+
+    [SerializeField]
+    private Animator animator;
+
+    [SerializeField]
+    private CanvasGroup canvasGroup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +28,8 @@ public class NPC : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Hello!");
+            canvasGroup.alpha = 1;
+            animator.Play("Wave_NPC");
         }
     }
 
@@ -28,7 +37,8 @@ public class NPC : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Bye!");
+            canvasGroup.alpha = 0;
+            animator.Play("Wave_NPC");
         }
     }
 }
