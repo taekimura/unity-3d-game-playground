@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
     {
         Gravity();
         
-        if(!dead)
+        if(!dead && !UIManager.MyInstance.MenuOpen)
         {
             Movement();
             Rotate();

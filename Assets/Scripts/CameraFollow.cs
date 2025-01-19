@@ -65,42 +65,46 @@ public class CameraFollow : MonoBehaviour
     // Called after all Update calls; used here to handle camera movement
     private void LateUpdate()
     {
+        if(!UIManager.MyInstance.MenuOpen)
+        {
         // Check if the right mouse button is pressed for manual camera rotation
-        if (Mouse.current.rightButton.isPressed)
-        {
-            cameraRotated = true;
-        }
-
-        // If the camera has been rotated and the right mouse button is released
-        if (cameraRotated && !Mouse.current.rightButton.isPressed)
-        {
-            // Calculate the local position relative to the default transform
-            Vector3 localPos = transform.InverseTransformPoint(defaultTransform.position);
-
-            // Determine the rotation direction to return to the default position
-            float xDirection = localPos.x < 0.0f ? 1 : -1; // -1 for counterclockwise
-
-            // Rotate back to the default position
-            Rotate(xDirection, returnSpeed);
-
-            // Check if the camera is close enough to the default position
-            if (Vector3.Distance(transform.position, defaultTransform.position) <= 0.1f && cameraRotated)
+            if (Mouse.current.rightButton.isPressed)
             {
-                // Set cameraRotated to true to reset the position and offset
-                cameraRotated = false;
-                transform.position = defaultTransform.position;
-                offset = transform.position - target.transform.position;
+                cameraRotated = true;
             }
-        }
-        else
-        {
-            // Rotate the camera based on mouse input
-            Rotate(mouseX, rotationSpeed);
-        }
 
-        // Ensure the camera is always looking at the target
-        transform.LookAt(target);
+            // If the camera has been rotated and the right mouse button is released
+            if (cameraRotated && !Mouse.current.rightButton.isPressed)
+            {
+                // Calculate the local position relative to the default transform
+                Vector3 localPos = transform.InverseTransformPoint(defaultTransform.position);
+
+                // Determine the rotation direction to return to the default position
+                float xDirection = localPos.x < 0.0f ? 1 : -1; // -1 for counterclockwise
+
+                // Rotate back to the default position
+                Rotate(xDirection, returnSpeed);
+
+                // Check if the camera is close enough to the default position
+                if (Vector3.Distance(transform.position, defaultTransform.position) <= 0.1f && cameraRotated)
+                {
+                    // Set cameraRotated to true to reset the position and offset
+                    cameraRotated = false;
+                    transform.position = defaultTransform.position;
+                    offset = transform.position - target.transform.position;
+                }
+            }
+            else
+            {
+                // Rotate the camera based on mouse input
+                Rotate(mouseX, rotationSpeed);
+            }
+
+            // Ensure the camera is always looking at the target
+            transform.LookAt(target);
+        }
     }
+
 
     // Rotates the camera around the target by a given amount and speed
     private void Rotate(float rotationAmount, float speed)
