@@ -47,21 +47,6 @@ public class Player : MonoBehaviour
     private float currentSpeed;
 
     [SerializeField]
-    private Vector3 playerVelocity;
-
-    private float gravityValue = -9.81f; // default value is being used in Unity
-
-    [SerializeField]
-    private float jumpHeight;
-
-    [SerializeField]
-    private bool isGrounded = false;
-
-    private float lastY;
-
-    private bool dead = false;
-
-    [SerializeField]
     private float rotationSpeed;
 
     private bool isRunning;
@@ -70,6 +55,23 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private float shootDelay;
+
+    [SerializeField]
+    private Vector3 playerVelocity;
+
+    private float gravityValue = -9.81f;
+
+    [SerializeField]
+    private float jumpHeight;
+
+    private bool isGrounded = false;
+
+    private float lastY;
+
+    private bool dead = false;
+
+    [SerializeField]
+    private GameObject smokePrefab;
 
     #endregion
 
@@ -84,12 +86,13 @@ public class Player : MonoBehaviour
         actions.Controls.Jump.performed += cxt => Jump();
         actions.Controls.Wave.performed += cxt => Wave();
         actions.Controls.Aim.performed += cxt => Aim();
+        actions.Controls.Request.performed += ctx => RequestSupplies();
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        AnyStateAnimation idle = new AnyStateAnimation("Idle",false,"Jump", "Fall", "Die");
+        AnyStateAnimation idle = new AnyStateAnimation("Idle",false,"Jump", "Fall","Die");
         AnyStateAnimation walk = new AnyStateAnimation("Walk", false, "Jump", "Fall", "Die");
         AnyStateAnimation run = new AnyStateAnimation("Run", false, "Jump", "Fall", "Die");
         AnyStateAnimation jump = new AnyStateAnimation("Jump", false, "Fall", "Die");
@@ -97,7 +100,7 @@ public class Player : MonoBehaviour
         AnyStateAnimation wave = new AnyStateAnimation("Wave",true, "Die");
         AnyStateAnimation aim = new AnyStateAnimation("Aim", true, "Die");
         AnyStateAnimation shoot = new AnyStateAnimation("Shoot", true, "Die");
-        AnyStateAnimation die = new AnyStateAnimation("Die", false);
+        AnyStateAnimation die = new AnyStateAnimation("Die",false);
 
 
         anyStateAnimator.AddAnimations(idle, walk, run, jump, wave, aim, shoot, fall, die);
@@ -107,8 +110,8 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Gravity();
-        
-        if(!dead && !UIManager.MyInstance.MenuOpen)
+
+        if (!dead && !UIManager.MyInstance.MenuOpen)
         {
             Movement();
             Rotate();
@@ -150,6 +153,8 @@ public class Player : MonoBehaviour
         }
     
     }
+    
+
 
     private void Run()
     {
@@ -170,9 +175,10 @@ public class Player : MonoBehaviour
     private void Gravity()
     {
         playerVelocity.y += gravityValue * Time.deltaTime;
+
         characterController.Move(playerVelocity * Time.deltaTime);
 
-        if(characterController.isGrounded && playerVelocity.y < 0)
+        if (characterController.isGrounded && playerVelocity.y < 0)
         {
             playerVelocity.y = 0;
             isGrounded = true;
@@ -181,26 +187,29 @@ public class Player : MonoBehaviour
 
     private void AirControl()
     {
-        float distancePerSecondSinceLastFrame = (transform.position.y - lastY) * Time.deltaTime;
+        float distancePerSecondSinceLastFram = (transform.position.y - lastY) * Time.deltaTime;
         lastY = transform.position.y;
 
-        if(distancePerSecondSinceLastFrame < 0 && !isGrounded)
+        if (distancePerSecondSinceLastFram < 0 && !isGrounded)
         {
+            //we are falling
             anyStateAnimator.TryPlayAnimation("Fall");
         }
         else
         {
+            //we are not falling
             anyStateAnimator.OnAnimationDone("Fall");
         }
         if (anyStateAnimator.IsAnimationActive("Jump") && isGrounded)
         {
             anyStateAnimator.OnAnimationDone("Jump");
         }
+
     }
 
     private void Jump()
     {
-        if(isGrounded)
+        if (isGrounded)
         {
             isGrounded = false;
             anyStateAnimator.TryPlayAnimation("Jump");
@@ -238,6 +247,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void RequestSupplies()
+    {
+        Instantiate(smokePrefab, transform.position, Quaternion.Euler(-90,0,0));
+    }
+
     private IEnumerator ShootCooldown()
     {
         yield return new WaitForSeconds(shootDelay);
@@ -254,13 +268,19 @@ public class Player : MonoBehaviour
         actions.Disable();
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
     public void Die()
     {
-        if(!dead)
+        if (!dead)
         {
-        playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        anyStateAnimator.TryPlayAnimation("Die");
-        dead = true;
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            anyStateAnimator.TryPlayAnimation("Die");
+            dead = true;
         }
     }
 }

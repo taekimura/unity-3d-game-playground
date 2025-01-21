@@ -46,6 +46,14 @@
                     "interactions": "Press"
                 },
                 {
+                    "name": "Request",
+                    "type": "Button",
+                    "id": "2fdaefe8-9975-4352-9fe1-eda2c686fc1f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
                     "name": "Aim",
                     "type": "Button",
                     "id": "c3396e37-3585-4b69-a03e-87e71a05242c",
@@ -162,6 +170,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4ec5d772-a15d-48b3-95f3-6b3092ae2c5b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Request",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

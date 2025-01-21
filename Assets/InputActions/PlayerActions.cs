@@ -59,6 +59,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""interactions"": ""Press""
                 },
                 {
+                    ""name"": ""Request"",
+                    ""type"": ""Button"",
+                    ""id"": ""2fdaefe8-9975-4352-9fe1-eda2c686fc1f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
                     ""name"": ""Aim"",
                     ""type"": ""Button"",
                     ""id"": ""c3396e37-3585-4b69-a03e-87e71a05242c"",
@@ -177,6 +185,17 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ec5d772-a15d-48b3-95f3-6b3092ae2c5b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Request"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -190,6 +209,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         m_Controls_Run = m_Controls.FindAction("Run", throwIfNotFound: true);
         m_Controls_Jump = m_Controls.FindAction("Jump", throwIfNotFound: true);
         m_Controls_Wave = m_Controls.FindAction("Wave", throwIfNotFound: true);
+        m_Controls_Request = m_Controls.FindAction("Request", throwIfNotFound: true);
         m_Controls_Aim = m_Controls.FindAction("Aim", throwIfNotFound: true);
     }
 
@@ -245,6 +265,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Controls_Run;
     private readonly InputAction m_Controls_Jump;
     private readonly InputAction m_Controls_Wave;
+    private readonly InputAction m_Controls_Request;
     private readonly InputAction m_Controls_Aim;
     public struct ControlsActions
     {
@@ -255,6 +276,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         public InputAction @Run => m_Wrapper.m_Controls_Run;
         public InputAction @Jump => m_Wrapper.m_Controls_Jump;
         public InputAction @Wave => m_Wrapper.m_Controls_Wave;
+        public InputAction @Request => m_Wrapper.m_Controls_Request;
         public InputAction @Aim => m_Wrapper.m_Controls_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Controls; }
         public void Enable() { Get().Enable(); }
@@ -280,6 +302,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Wave.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnWave;
                 @Wave.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnWave;
                 @Wave.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnWave;
+                @Request.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRequest;
+                @Request.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRequest;
+                @Request.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnRequest;
                 @Aim.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnAim;
@@ -302,6 +327,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Wave.started += instance.OnWave;
                 @Wave.performed += instance.OnWave;
                 @Wave.canceled += instance.OnWave;
+                @Request.started += instance.OnRequest;
+                @Request.performed += instance.OnRequest;
+                @Request.canceled += instance.OnRequest;
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
@@ -316,6 +344,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnWave(InputAction.CallbackContext context);
+        void OnRequest(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
     }
 }
