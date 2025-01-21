@@ -70,9 +70,6 @@ public class Player : MonoBehaviour
 
     private bool dead = false;
 
-    [SerializeField]
-    private GameObject smokePrefab;
-
     #endregion
 
 
@@ -117,7 +114,7 @@ public class Player : MonoBehaviour
             Rotate();
             Shoot();
             AirControl();
-        }
+        }  
     }
 
     private void Movement()
@@ -249,7 +246,8 @@ public class Player : MonoBehaviour
 
     private void RequestSupplies()
     {
-        Instantiate(smokePrefab, transform.position, Quaternion.Euler(-90,0,0));
+        Instantiate(GameManager.Instance.SmokePrefab, transform.position, Quaternion.Euler(-90,0,0));
+        GameManager.Instance.SpawnPlane(transform.position);
     }
 
     private IEnumerator ShootCooldown()
