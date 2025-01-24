@@ -20,3 +20,4 @@ Unity 2019.3.9f1 / Supported platforms: macOS, WebGL
 5. Select the target platform and click the "Build" button to build the project
 
 
+<img width="700" alt="Screenshot 2025-01-23 at 21 37 01" src="https://github.com/user-attachments/assets/b75ac90f-991a-498a-a11d-ca8ca59ef283" />
