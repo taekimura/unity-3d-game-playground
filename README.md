@@ -1,7 +1,6 @@
 ### Required Environment
 
-・Unity 2019.3.9f1
-・Supported platforms: macOS, WebGL
+Unity 2019.3.9f1 / Supported platforms: macOS, WebGL
 
 
 ### Setting Up the Project
